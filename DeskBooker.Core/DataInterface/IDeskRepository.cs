@@ -1,10 +1,11 @@
-﻿using System;
+﻿using DeskBooker.Core.Domain;
+using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace DeskBooker.Core.DataInterface
 {
-    interface IDeskRepository
+    public interface IDeskRepository
     {
+        IEnumerable<Desk> GetAvailableDesk(DateTime time);
     }
 }

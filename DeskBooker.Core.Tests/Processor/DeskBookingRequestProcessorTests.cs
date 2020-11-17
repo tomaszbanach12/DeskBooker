@@ -3,19 +3,21 @@ using DeskBooker.Core.DataInterface;
 using Moq;
 using System;
 using Xunit;
+using System.Collections.Generic;
 
 namespace DeskBooker.Core.Processor
 {
     public class DeskBookingRequestProcessorTests
     {
         private readonly Mock<IDeskBookingRepository> _deskBookingRepositoryMock;
+        private readonly Mock<IDeskRepository> _deskRepositoryMock;
         private readonly DeskBookingRequest _request;
+        private readonly List<Desk> _availableDesks;
         private readonly DeskBookingRequestProcessor _processor; 
 
         public DeskBookingRequestProcessorTests()
         {
-            _deskBookingRepositoryMock = new Mock<IDeskBookingRepository>();
-
+            
             // Arrange
             _request = new DeskBookingRequest
             {
@@ -25,15 +27,20 @@ namespace DeskBooker.Core.Processor
                 Date = new DateTime(2020, 11, 13)
             };
 
+            _availableDesks = new List<Desk> { new Desk() };
+
+            _deskBookingRepositoryMock = new Mock<IDeskBookingRepository>();
+            _deskRepositoryMock = new Mock<IDeskRepository>();
+            _deskRepositoryMock.Setup(x => x.GetAvailableDesk(_request.Date))
+                .Returns(_availableDesks);
+
             _processor = new DeskBookingRequestProcessor(
-                _deskBookingRepositoryMock.Object);
+                _deskBookingRepositoryMock.Object, _deskRepositoryMock.Object);
         }
 
         [Fact]
         public void ShouldReturnDeskBookingResultWithRequestValues()
         {
-            
-
             // Act
             DeskBookingResult result = _processor.BookDesk(_request);
 
@@ -77,6 +84,8 @@ namespace DeskBooker.Core.Processor
         [Fact]
         public void ShouldNotSaveDeskBookingIfNoDeskIsAvailable()
         {
+            _availableDesks.Clear();
+
             _processor.BookDesk(_request);
 
             _deskBookingRepositoryMock.Verify(x => x.Save(It.IsAny<DeskBooking>()), Times.Never);
