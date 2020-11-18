@@ -92,5 +92,51 @@ namespace DeskBooker.Core.Processor
 
             _deskBookingRepositoryMock.Verify(x => x.Save(It.IsAny<DeskBooking>()), Times.Never);
         }
+
+        [Theory]
+        [InlineData(DeskBookingResultCode.Success, true)]
+        [InlineData(DeskBookingResultCode.NoDeskAvailable, false)]
+
+        public void ShouldReturnExpectedResultCode(DeskBookingResultCode expectedResultCode, bool isDeskAvailable)
+        {
+            if (!isDeskAvailable)
+            {
+                _availableDesks.Clear();
+            }
+
+            var result = _processor.BookDesk(_request);
+
+            Assert.Equal(expectedResultCode, result.Code);
+        }
+
+        [Theory]
+        [InlineData("3f77d236-0a5a-4fb6-9e6f-12f46ff9f645", true)]
+        [InlineData("00000000-0000-0000-0000-000000000000", false)]
+        [InlineData(null, false)]
+
+        public void ShouldReturnExpectedDeskBookingId(string expectedDeskBookingIdInString, bool isDeskAvailable)
+        {
+            Guid expectedDeskBookingId = Guid.Empty;
+            if (expectedDeskBookingIdInString != null)
+            {
+                expectedDeskBookingId = new Guid(expectedDeskBookingIdInString);
+            }  
+
+            if (!isDeskAvailable)
+            {
+                _availableDesks.Clear();
+            }
+            else
+            {
+                _deskBookingRepositoryMock.Setup(x => x.Save(It.IsAny<DeskBooking>()))
+                    .Callback<DeskBooking>(deskBooking =>
+                    {
+                        deskBooking.Id = expectedDeskBookingId;
+                    });
+            }
+            var result = _processor.BookDesk(_request);
+
+            Assert.Equal(expectedDeskBookingId, result.DeskBookingId);
+        }
     }
 }

@@ -1,7 +1,10 @@
-﻿namespace DeskBooker.Core.Domain
+﻿using System;
+
+namespace DeskBooker.Core.Domain
 {
     public class DeskBookingResult : DeskBookingBase
     {
-
+        public DeskBookingResultCode Code { get; set; }
+        public Guid DeskBookingId { get; set; }
     }
 }
