@@ -56,14 +56,17 @@ namespace DeskBooker.Core.Processor
         [Fact]
         public void ThrowExceptionIfRequestIsNull()
         {
+            // Arrange & Act
             var exception = Assert.Throws<ArgumentNullException>(() => _processor.BookDesk(null));
 
+            // Assert
             Assert.Equal("request", exception.ParamName);
         }
 
         [Fact]
         public void ShouldSaveDeskBooking()
         {
+            // Arrange
             DeskBooking savedDeskBooking = null;
             _deskBookingRepositoryMock.Setup(x => x.Save(It.IsAny<DeskBooking>()))
                 .Callback<DeskBooking>(deskBooking => 
@@ -71,10 +74,12 @@ namespace DeskBooker.Core.Processor
                     savedDeskBooking = deskBooking;
                 });
 
+            // Act
             _processor.BookDesk(_request);
 
             _deskBookingRepositoryMock.Verify(x => x.Save(It.IsAny<DeskBooking>()), Times.Once);
 
+            // Assert
             Assert.NotNull(savedDeskBooking);
             Assert.Equal(_request.FirstName, savedDeskBooking.FirstName);
             Assert.Equal(_request.LastName, savedDeskBooking.LastName);
@@ -86,10 +91,13 @@ namespace DeskBooker.Core.Processor
         [Fact]
         public void ShouldNotSaveDeskBookingIfNoDeskIsAvailable()
         {
+            // Arrange
             _availableDesks.Clear();
 
+            // Act
             _processor.BookDesk(_request);
 
+            // Assert
             _deskBookingRepositoryMock.Verify(x => x.Save(It.IsAny<DeskBooking>()), Times.Never);
         }
 
@@ -99,13 +107,16 @@ namespace DeskBooker.Core.Processor
 
         public void ShouldReturnExpectedResultCode(DeskBookingResultCode expectedResultCode, bool isDeskAvailable)
         {
+            // Arrange
             if (!isDeskAvailable)
             {
                 _availableDesks.Clear();
             }
 
+            // Act
             var result = _processor.BookDesk(_request);
 
+            // Assert
             Assert.Equal(expectedResultCode, result.Code);
         }
 
@@ -116,6 +127,7 @@ namespace DeskBooker.Core.Processor
 
         public void ShouldReturnExpectedDeskBookingId(string expectedDeskBookingIdInString, bool isDeskAvailable)
         {
+            // Arrange
             Guid expectedDeskBookingId = Guid.Empty;
             if (expectedDeskBookingIdInString != null)
             {
@@ -134,8 +146,11 @@ namespace DeskBooker.Core.Processor
                         deskBooking.Id = expectedDeskBookingId;
                     });
             }
+            
+            // Act
             var result = _processor.BookDesk(_request);
 
+            // Assert
             Assert.Equal(expectedDeskBookingId, result.DeskBookingId);
         }
     }
