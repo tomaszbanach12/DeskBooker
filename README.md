@@ -1,2 +1,2 @@
 # DeskBooker
-Test Driven Development in C# course from Pluralsight.com
+Test Driven Development in C#
