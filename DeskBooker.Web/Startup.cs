@@ -1,4 +1,5 @@
 using DeskBooker.Core.DataInterface;
+using DeskBooker.Core.Processor;
 using DeskBooker.DataAccess;
 using DeskBooker.DataAccess.Repositories;
 using Microsoft.AspNetCore.Builder;
@@ -25,14 +26,19 @@ namespace DeskBooker.Web
         {
             services.AddRazorPages();
 
-            var connectionString = "DataSource=:memory";
+            var connectionString = "DataSource=:memory:";
             var connection = new SqliteConnection(connectionString);
+            connection.Open();
 
             services.AddDbContext<DeskBookerContext>(options =>
                 options.UseSqlite(connection)
             );
 
             EnsureDatabaseExists(connection);
+
+            services.AddTransient<IDeskRepository, DeskRepository>();
+            services.AddTransient<IDeskBookingRepository, DeskBookingRepository>();
+            services.AddTransient<IDeskBookingRequestProcessor, DeskBookingRequestProcessor>();
         }
 
         private static void EnsureDatabaseExists(SqliteConnection connection)
