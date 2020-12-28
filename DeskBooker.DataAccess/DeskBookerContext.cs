@@ -23,7 +23,7 @@ namespace DeskBooker.DataAccess
         {
             modelBuilder.Entity<Desk>().HasData(
                 new Desk { Id = Guid.NewGuid(), Description = "Desk 1" },
-                new Desk { Id = Guid.NewGuid(), Description = "Desk 1" }
+                new Desk { Id = Guid.NewGuid(), Description = "Desk 2" }
             );
         }
     }
