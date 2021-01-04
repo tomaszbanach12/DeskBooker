@@ -22,8 +22,8 @@ namespace DeskBooker.DataAccess
         private void SeedData(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Desk>().HasData(
-                new Desk { Id = Guid.NewGuid(), Description = "Desk 1" },
-                new Desk { Id = Guid.NewGuid(), Description = "Desk 2" }
+                new Desk { Id = 1, Description = "Desk 1" },
+                new Desk { Id = 2, Description = "Desk 2" }
             );
         }
     }

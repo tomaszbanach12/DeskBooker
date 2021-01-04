@@ -44,6 +44,10 @@ namespace DeskBooker.Web
         private static void EnsureDatabaseExists(SqliteConnection connection)
         {
             var builder = new DbContextOptionsBuilder<DeskBookerContext>();
+            builder.UseSqlite(connection);
+
+            using var context = new DeskBookerContext(builder.Options);
+            context.Database.EnsureCreated();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

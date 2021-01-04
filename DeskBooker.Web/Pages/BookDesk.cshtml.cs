@@ -30,6 +30,7 @@ namespace DeskBooker.Web.Pages
                     {
                         result.DeskBookingId,
                         result.FirstName,
+                        result.LastName,
                         result.Date
                     });
                 }

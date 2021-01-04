@@ -5,12 +5,11 @@
 }
 
 <h1 class="display-4">Book a desk</h1>
-<p class="lead">at our coffee shop in <b>Zurich</b> for a full</p>
+<p class="lead">at our coffee shop in <b>Warsaw</b> for a full day.</p>
 
 <form method="post">
-
     <div class="form-group">
-        <label asp-for="DeskBookingRequest.FirstName"></label>
+        <label asp-for="DeskBookingRequest.FirstName" class="control-label"></label>
         <input asp-for="DeskBookingRequest.FirstName" class="form-control" />
         <span class="text-danger" asp-validation-for="DeskBookingRequest.FirstName"></span>
     </div>
@@ -29,4 +28,5 @@
         <input asp-for="DeskBookingRequest.Date" class="form-control" />
         <span class="text-danger" asp-validation-for="DeskBookingRequest.Date"></span>
     </div>
+    <button type="submit" class="btn btn-primary">Book a desk</button>
 </form>

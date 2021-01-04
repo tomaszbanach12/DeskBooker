@@ -1,0 +1,27 @@
+﻿@page
+@model DeskBooker.Web.Pages.DesksModel
+@{
+    ViewData["Title"] = "Desks";
+}
+
+<h1 class="display-4">Desks</h1>
+
+<p class="lead">Here you see a table with all desks available at WiredBrainCoffee Warsow.</p>
+
+<table class="table table-striped table-bordered dt-responsive nowrap">
+    <thead class="thead-light">
+        <tr>
+            <th>Desk Number</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var desk in Model.Desks)
+        {
+        <tr>
+            <td>@desk.Id</td>
+            <td>@desk.Description</td>
+        </tr>
+        }
+    </tbody>
+</table>

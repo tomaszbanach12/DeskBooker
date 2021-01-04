@@ -22,6 +22,7 @@ namespace DeskBooker.DataAccess.Repositories
         public DeskBooking Save(DeskBooking newDeskBooking)
         {
             _deskBookerContext.Add(newDeskBooking);
+            _deskBookerContext.SaveChanges();
             return newDeskBooking;
         }
     }

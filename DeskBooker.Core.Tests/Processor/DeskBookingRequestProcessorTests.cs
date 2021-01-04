@@ -28,7 +28,7 @@ namespace DeskBooker.Core.Processor
                 Date = new DateTime(2020, 11, 13)
             };
 
-            _availableDesks = new List<Desk> { new Desk { Id = Guid.NewGuid() } };
+            _availableDesks = new List<Desk> { new Desk { Id = 7 } };
 
             _deskBookingRepositoryMock = new Mock<IDeskBookingRepository>();
             _deskRepositoryMock = new Mock<IDeskRepository>();
@@ -121,19 +121,12 @@ namespace DeskBooker.Core.Processor
         }
 
         [Theory]
-        [InlineData("3f77d236-0a5a-4fb6-9e6f-12f46ff9f645", true)]
-        [InlineData("00000000-0000-0000-0000-000000000000", false)]
+        [InlineData(5, true)]
         [InlineData(null, false)]
 
-        public void ShouldReturnExpectedDeskBookingId(string expectedDeskBookingIdInString, bool isDeskAvailable)
+        public void ShouldReturnExpectedDeskBookingId(int? expectedDeskBookingId, bool isDeskAvailable)
         {
             // Arrange
-            Guid expectedDeskBookingId = Guid.Empty;
-            if (expectedDeskBookingIdInString != null)
-            {
-                expectedDeskBookingId = new Guid(expectedDeskBookingIdInString);
-            }  
-
             if (!isDeskAvailable)
             {
                 _availableDesks.Clear();
@@ -143,7 +136,7 @@ namespace DeskBooker.Core.Processor
                 _deskBookingRepositoryMock.Setup(x => x.Save(It.IsAny<DeskBooking>()))
                     .Callback<DeskBooking>(deskBooking =>
                     {
-                        deskBooking.Id = expectedDeskBookingId;
+                        deskBooking.Id = expectedDeskBookingId.Value;
                     });
             }
             
